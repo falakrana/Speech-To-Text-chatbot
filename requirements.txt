@@ -1,0 +1,15 @@
+langchain
+
+langchain_groq
+
+flask
+
+langchain_core
+
+SpeechRecognition
+
+
+markdown
+
+
+dotenv
