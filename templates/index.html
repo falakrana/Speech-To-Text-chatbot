@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>🎙️ Gemini Voice Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<style>
+    .loader {
+        border: 6px solid #2c2c3e;
+        border-top: 6px solid #7f5af0;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: auto;
+        display: none;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+<body>
+    <div class="container">
+        <h1>🧠 Groq Voice Assistant</h1>
+        <button onclick="startListening()">🎤 Talk</button>
+        <p id="status">Click "Talk" and start speaking...</p>
+        <div class="loader" id="loader"></div>
+        <div class="chat">
+            <p><strong>You:</strong> <span id="userText"></span></p>
+            <p><strong>Gemini:</strong> <span id="botResponse"></span></p>
+            <p><small id="responseTime"></small></p>
+        </div>
+    </div>
+
+    <script>
+        async function startListening() {
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('status').innerText = '🎧 Listening...';
+
+            const response = await fetch('/listen', { method: 'POST' });
+            const data = await response.json();
+
+            document.getElementById('loader').style.display = 'none';
+
+            if (data.error) {
+                document.getElementById('status').innerText = '❌ ' + data.error;
+            } else {
+                document.getElementById('status').innerText = '✅ Response received!';
+                document.getElementById('userText').innerText = data.query;
+                document.getElementById('botResponse').innerHTML = data.response;
+                document.getElementById('responseTime').innerText = '⏱️ ' + data.time + 's';
+            }
+        }
+    </script>
+
+</body>
+
+</html>
